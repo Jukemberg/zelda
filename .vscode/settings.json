@@ -1,0 +1,14 @@
+{
+    "Lua.completion.autoRequire": true,
+    "Lua.workspace.checkThirdParty": "LÖVE",
+    "Lua.workspace.ignoreDir": [
+        ".vscode",
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-global",
+        "duplicate-set-field",
+        "redundant-parameter",
+        "deprecated",
+        "lowercase-global"
+    ]
+}

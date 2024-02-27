@@ -12,13 +12,13 @@ function GameObject:init(def, x, y)
     
     -- string identifying this object type
     self.type = def.type
-
     self.texture = def.texture
     self.frame = def.frame or 1
 
     -- whether it acts as an obstacle or not
     self.solid = def.solid
-
+    self.consumable = def.consumable
+    self.consumed = def.consumed
     self.defaultState = def.defaultState
     self.state = self.defaultState
     self.states = def.states
@@ -29,8 +29,12 @@ function GameObject:init(def, x, y)
     self.width = def.width
     self.height = def.height
 
+    -- extra data
+    self.value = def.value
+
     -- default empty collision callback
     self.onCollide = function() end
+    self.onConsume = function() end
 end
 
 function GameObject:update(dt)

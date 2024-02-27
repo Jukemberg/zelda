@@ -174,6 +174,28 @@ function Room:update(dt)
                 gStateMachine:change('game-over')
             end
         end
+
+         -- chance to drop heart if entity death == true
+         if entity.dead and not entity.dropped then
+            if math.random(5) == 1 then
+                local heart = GameObject(GAME_OBJECT_DEFS['heart'], entity.x, entity.y)
+                if math.random(2) == 1 then
+                    heart.state = 'full'
+                else
+                    heart.state = 'half'
+                end
+
+                heart.onConsume = function()
+                    gSounds['heal']:play()
+                    heart.consumed = true
+                    local amount = heart.states[heart.state].value
+                    self.player:heal(amount)
+                end
+
+                table.insert(self.objects, heart)
+            end
+            entity.dropped = true
+        end
     end
 
     for k, object in pairs(self.objects) do
@@ -181,7 +203,15 @@ function Room:update(dt)
 
         -- trigger collision callback on object
         if self.player:collides(object) then
-            object:onCollide()
+            if object.consumable and not object.consumed then
+                object:onConsume()
+            else
+                object:onCollide()
+            end
+        end
+
+        if object.consumed then
+            table.insert(self.objects, k, nil)
         end
     end
 end
